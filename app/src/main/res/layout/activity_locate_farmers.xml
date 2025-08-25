@@ -60,7 +60,7 @@
         android:layout_margin="16dp"
         android:orientation="vertical">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnZoomIn"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -68,9 +68,10 @@
             android:backgroundTint="#3F51B5"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:background="@drawable/ic_zoom_in" />
+            android:background="@drawable/ic_zoom_in"
+            app:backgroundTint="@null" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnZoomOut"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -79,9 +80,10 @@
             android:backgroundTint="#3F51B5"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:background="@drawable/ic_zoom_out" />
+            android:background="@drawable/ic_zoom_out"
+            app:backgroundTint="@null" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMyLocation"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -90,7 +92,8 @@
             android:backgroundTint="#3F51B5"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:background="@drawable/ic_location" />
+            android:background="@drawable/ic_location"
+            app:backgroundTint="@null" />
     </LinearLayout>
 
     <LinearLayout

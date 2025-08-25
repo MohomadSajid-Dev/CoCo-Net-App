@@ -26,7 +26,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText cityEditText;
     private FirebaseFirestore db;
 
-    // Add fields to store coordinates
     private double selectedLatitude = 0.0;
     private double selectedLongitude = 0.0;
 
@@ -43,22 +42,18 @@ public class CreateAccountActivity extends AppCompatActivity {
         cityEditText = findViewById(R.id.city_edit_text);
         RelativeLayout cityContainer = findViewById(R.id.city_container);
 
-        // Set up city selection to open map
         cityContainer.setOnClickListener(v -> openMapForLocationSelection());
         cityEditText.setOnClickListener(v -> openMapForLocationSelection());
 
-        // Make city field non-editable but clickable
         cityEditText.setFocusable(false);
         cityEditText.setClickable(true);
 
-        // Setup spinner for role selection
         Spinner spinner = findViewById(R.id.who_are_you_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.who_you_are_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        // Setup next button
         ImageView nextButton = findViewById(R.id.next_button);
         nextButton.setOnClickListener(v -> validateAndSave(spinner));
     }
@@ -84,12 +79,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             if (selectedLocation != null && !selectedLocation.isEmpty()) {
                 cityEditText.setText(selectedLocation);
-                // Store coordinates for database
                 selectedLatitude = latitude;
                 selectedLongitude = longitude;
                 Toast.makeText(this, "Location selected: " + selectedLocation, Toast.LENGTH_SHORT).show();
-
-                // You can store lat/lng for future use if needed
                 Log.d(TAG, "Selected location: " + selectedLocation + " (" + latitude + ", " + longitude + ")");
             }
         }
@@ -108,27 +100,22 @@ public class CreateAccountActivity extends AppCompatActivity {
         String role = spinner.getSelectedItem().toString();
         String city = cityEditText.getText().toString().trim();
 
-        // Validation
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() ||
                 mobile.isEmpty() || city.isEmpty() || role.equals("Who You Are")) {
             Toast.makeText(this, "Please fill all fields correctly", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create user data
         Map<String, Object> user = new HashMap<>();
         user.put("username", username);
         user.put("email", email);
-        user.put("password", password); // ⚠️ Not secure - for demo only
+        user.put("password", password);
         user.put("mobile", mobile);
         user.put("role", role);
         user.put("city", city);
-
-        // Store coordinates for farmers and distributors
         user.put("latitude", selectedLatitude);
         user.put("longitude", selectedLongitude);
 
-        // Save to Firestore
         db.collection("users")
                 .add(user)
                 .addOnSuccessListener(documentReference -> {

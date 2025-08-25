@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -20,7 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private CircleImageView profileImage;
     private TextView helloText, usernameText;
-    private LinearLayout viewProfileLayout, ordersLayout, deliveryStatusLayout, settingsLayout, logoutLayout;
+    private LinearLayout viewProfileLayout, ordersLayout, deliveredOrdersLayout, settingsLayout, logoutLayout;
     private FrameLayout loadingOverlay;
     private LottieAnimationView loadingLottie;
 
@@ -31,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         initViews();
         setupClickListeners();
-        setUserData("Mohomad Sajid");
+        setUserData(getUserName());
         setupLoadingOverlay();
     }
 
@@ -41,7 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.username_text);
         viewProfileLayout = findViewById(R.id.view_profile_layout);
         ordersLayout = findViewById(R.id.orders_layout);
-        deliveryStatusLayout = findViewById(R.id.delivery_status_layout);
+        deliveredOrdersLayout = findViewById(R.id.delivered_orders_layout);
+
         settingsLayout = findViewById(R.id.settings_layout);
         logoutLayout = findViewById(R.id.logout_layout);
     }
@@ -50,28 +52,34 @@ public class ProfileActivity extends AppCompatActivity {
         viewProfileLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "View Profile clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProfileActivity.this, FarmerProfileActivity.class);
+                startActivity(intent);
             }
         });
 
         ordersLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Orders clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProfileActivity.this, NewOrdersActivity.class);
+                startActivity(intent);
             }
         });
 
-        deliveryStatusLayout.setOnClickListener(new View.OnClickListener() {
+        deliveredOrdersLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Delivery Status clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProfileActivity.this, DeliveredOrdersActivity.class);
+                startActivity(intent);
             }
         });
+
+
 
         settingsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Settings clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -94,10 +102,15 @@ public class ProfileActivity extends AppCompatActivity {
         usernameText.setText(username);
     }
 
+    private String getUserName() {
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        return prefs.getString("username", "User");
+    }
+
     private void setupLoadingOverlay() {
         loadingOverlay = new FrameLayout(this);
         loadingOverlay.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        loadingOverlay.setBackgroundColor(0x80000000); // semi-transparent black
+        loadingOverlay.setBackgroundColor(0x80000000);
         loadingOverlay.setVisibility(View.GONE);
         loadingLottie = new LottieAnimationView(this);
         FrameLayout.LayoutParams lottieParams = new FrameLayout.LayoutParams(300, 300);

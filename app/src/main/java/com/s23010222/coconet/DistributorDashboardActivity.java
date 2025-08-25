@@ -6,6 +6,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.text.TextWatcher;
+import android.text.Editable;
+import android.widget.Toast;
+import android.os.Handler;
+import android.content.SharedPreferences;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import com.airbnb.lottie.LottieAnimationView;
+import android.view.Gravity;
+import android.widget.FrameLayout.LayoutParams;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,31 +32,25 @@ import android.hardware.SensorManager;
 
 public class DistributorDashboardActivity extends AppCompatActivity {
 
-    // Header components
     private CircleImageView profileImage;
     private TextView usernameText;
 
-    // Search component
     private EditText searchEditText;
 
-    // See All links
     private TextView seeAllText, seeAllOtherText;
 
-    // Bottom navigation
     private LinearLayout homeTab, locationTab, ordersTab, notificationTab, menuTab;
 
     private RecyclerView recyclerViewFarmerPosts;
     private List<FarmerPost> farmerPosts;
-    private List<FarmerPost> allFarmerPosts; // Store all posts
+    private List<FarmerPost> allFarmerPosts;
     private FarmerPostAdapter farmerPostAdapter;
     private FirebaseFirestore db;
 
-    private static final int DASHBOARD_POST_LIMIT = 4; // Show only 4 posts on dashboard
+    private static final int DASHBOARD_POST_LIMIT = 4;
 
-    // Deals banner
     private View dealsBannerCard;
 
-    // Shake-to-refresh sensor fields
     private SensorManager sensorManager;
     private float lastX, lastY, lastZ;
     private long lastShakeTime = 0;
@@ -66,27 +71,22 @@ public class DistributorDashboardActivity extends AppCompatActivity {
         setupClickListeners();
         setupUserData();
 
-        // Shake-to-refresh setup
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private void initializeViews() {
-        // Header components
         profileImage = findViewById(R.id.profileImage);
+        usernameText = findViewById(R.id.usernameText);
 
-        // Search component
         searchEditText = findViewById(R.id.searchEditText);
 
-        // See All links
         seeAllText = findViewById(R.id.seeAllText);
         seeAllOtherText = findViewById(R.id.seeAllOtherText);
 
-        // Deals banner
         dealsBannerCard = findViewById(R.id.dealsBannerCard);
 
-        // Bottom navigation
         homeTab = findViewById(R.id.homeTab);
         locationTab = findViewById(R.id.locationTab);
         ordersTab = findViewById(R.id.ordersTab);
@@ -124,7 +124,6 @@ public class DistributorDashboardActivity extends AppCompatActivity {
                         post.setImageUrl(document.getString("imageUrl"));
                         post.setFarmerId(document.getString("farmerId"));
 
-                        // Load coordinates if available
                         Double latitude = document.getDouble("latitude");
                         Double longitude = document.getDouble("longitude");
                         if (latitude != null && longitude != null) {
@@ -135,18 +134,15 @@ public class DistributorDashboardActivity extends AppCompatActivity {
                         allFarmerPosts.add(post);
                     }
 
-                    // Show only the last 4 posts on dashboard
                     displayLimitedPosts();
                 })
                 .addOnFailureListener(e -> {
-                    // Optionally show a Toast or log error
                 });
     }
 
     private void displayLimitedPosts() {
         farmerPosts.clear();
 
-        // Add only the first 4 posts (which are already sorted by timestamp DESC)
         int postsToShow = Math.min(DASHBOARD_POST_LIMIT, allFarmerPosts.size());
         for (int i = 0; i < postsToShow; i++) {
             farmerPosts.add(allFarmerPosts.get(i));
@@ -163,7 +159,6 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Profile image click
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +166,6 @@ public class DistributorDashboardActivity extends AppCompatActivity {
             }
         });
 
-        // Search functionality
         searchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -181,7 +175,26 @@ public class DistributorDashboardActivity extends AppCompatActivity {
             }
         });
 
-        // See All links - Modified to pass all posts
+        // Add text change listener for search functionality
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchText = s.toString().trim();
+                if (!searchText.isEmpty()) {
+                    performSearch(searchText);
+                } else {
+                    // Reset to show all posts if search is empty
+                    displayLimitedPosts();
+                }
+            }
+        });
+
         seeAllText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +209,6 @@ public class DistributorDashboardActivity extends AppCompatActivity {
             }
         });
 
-        // Deals banner click - open all coconut deals
         dealsBannerCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,11 +216,9 @@ public class DistributorDashboardActivity extends AppCompatActivity {
             }
         });
 
-        // Bottom navigation clicks
         homeTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Already on home, do nothing or refresh
                 refreshDashboard();
             }
         });
@@ -243,30 +253,33 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     }
 
     private void setupUserData() {
-        // Set username - you can get this from SharedPreferences or user session
-        // Example: usernameText.setText(getUserName());
+        // Set username from shared preferences or default
+        String username = getUserName();
+        if (usernameText != null) {
+            usernameText.setText(username);
+        }
 
-        // Load profile image - you can use Glide or Picasso for image loading
-        // Example: Glide.with(this).load(getUserProfileImageUrl()).into(profileImage);
+        // Load profile image if available
+        String profileImageUrl = getUserProfileImageUrl();
+        if (profileImage != null && profileImageUrl != null && !profileImageUrl.isEmpty()) {
+            // You can use Glide or other image loading library here
+            // Glide.with(this).load(profileImageUrl).into(profileImage);
+        }
     }
 
-    // Navigation methods
     private void openProfileActivity() {
-        // TODO: Create ProfileActivity
-        // Intent intent = new Intent(this, ProfileActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, DistributorProfileActivity.class);
+        startActivity(intent);
     }
 
     private void openSearchActivity() {
-        // TODO: Create SearchActivity
-        // Intent intent = new Intent(this, SearchActivity.class);
-        // startActivity(intent);
+        // For distributors, this could open a search activity to find specific products
+        Toast.makeText(this, "Search functionality coming soon", Toast.LENGTH_SHORT).show();
     }
 
     private void openAllProductsActivity(String category, List<FarmerPost> allPosts) {
         Intent intent = new Intent(this, AllProductsActivity.class);
         intent.putExtra("category", category);
-        // Pass all posts to the AllProductsActivity
         intent.putParcelableArrayListExtra("all_posts", new ArrayList<>(allPosts));
         startActivity(intent);
     }
@@ -277,50 +290,59 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     }
 
     private void openOrdersActivity() {
-        // TODO: Create OrdersActivity
-        // Intent intent = new Intent(this, OrdersActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, DistributorOrdersActivity.class);
+        startActivity(intent);
     }
 
     private void openNotificationActivity() {
-        // TODO: Create NotificationActivity
-        // Intent intent = new Intent(this, NotificationActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, DistributorNotificationActivity.class);
+        startActivity(intent);
     }
 
     private void openMenuActivity() {
-        // TODO: Create MenuActivity
-        // Intent intent = new Intent(this, MenuActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, DistributorProfileActivity.class);
+        startActivity(intent);
     }
 
     private void refreshDashboard() {
-        // Reload data and show limited posts
         loadFarmerPosts();
     }
 
-    // Utility methods that you might want to implement
+    private void performSearch(String searchText) {
+        // Filter posts based on search text
+        List<FarmerPost> filteredPosts = new ArrayList<>();
+        for (FarmerPost post : allFarmerPosts) {
+            if (post.getProductName().toLowerCase().contains(searchText.toLowerCase()) ||
+                    post.getDescription().toLowerCase().contains(searchText.toLowerCase()) ||
+                    post.getLocation().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredPosts.add(post);
+            }
+        }
+
+        // Update the displayed posts
+        farmerPosts.clear();
+        int postsToShow = Math.min(DASHBOARD_POST_LIMIT, filteredPosts.size());
+        for (int i = 0; i < postsToShow; i++) {
+            farmerPosts.add(filteredPosts.get(i));
+        }
+
+        farmerPostAdapter.notifyDataSetChanged();
+    }
+
     private String getUserName() {
-        // Get username from SharedPreferences or user session
-        // return getSharedPreferences("user_prefs", MODE_PRIVATE).getString("username", "Username");
-        return "Username";
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        return prefs.getString("username", "User");
     }
 
     private String getUserProfileImageUrl() {
-        // Get profile image URL from SharedPreferences or user session
-        // return getSharedPreferences("user_prefs", MODE_PRIVATE).getString("profile_image", "");
         return "";
     }
 
-    // Optional: Handle back button press
     @Override
     public void onBackPressed() {
-        // If you want to prevent back navigation or show exit dialog
-        // showExitDialog();
         super.onBackPressed();
     }
 
-    // Optional: Handle activity lifecycle
     @Override
     protected void onPause() {
         super.onPause();
@@ -349,7 +371,6 @@ public class DistributorDashboardActivity extends AppCompatActivity {
                 float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
                 if (speed > SHAKE_THRESHOLD) {
-                    // SHAKE DETECTED! Call your refresh method here
                     refreshDashboard();
                 }
 

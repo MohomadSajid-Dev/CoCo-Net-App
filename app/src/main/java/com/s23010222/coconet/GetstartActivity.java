@@ -19,7 +19,6 @@ public class GetstartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 🔥 Initialize Firebase
         FirebaseApp.initializeApp(this);
 
         setContentView(R.layout.activity_getstart);

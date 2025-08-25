@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <!-- Header Section with Gradient -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -29,6 +28,7 @@
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
+                android:id="@+id/usernameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username"
@@ -48,7 +48,6 @@
 
     </LinearLayout>
 
-    <!-- Search Bar -->
     <androidx.cardview.widget.CardView
         android:id="@+id/searchCard"
         android:layout_width="match_parent"
@@ -82,7 +81,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Main Content ScrollView -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -138,7 +136,6 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!-- Page Indicator -->
             <LinearLayout
                 android:id="@+id/dotsIndicator"
                 android:layout_width="wrap_content"
@@ -161,7 +158,6 @@
 
             </LinearLayout>
 
-            <!-- Your Coconut Posts Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -189,7 +185,6 @@
 
             </LinearLayout>
 
-            <!-- Farmer Posts RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewFarmerPosts"
                 android:layout_width="match_parent"
@@ -198,7 +193,6 @@
                 android:overScrollMode="never"
                 android:scrollbars="vertical" />
 
-            <!-- Your Other Posts Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -230,7 +224,6 @@
 
     </ScrollView>
 
-    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

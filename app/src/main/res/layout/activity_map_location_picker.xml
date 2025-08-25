@@ -7,14 +7,12 @@
     android:background="@color/background_color"
     tools:context=".MapLocationPickerActivity">
 
-    <!-- Map Fragment -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Top Search Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/search_card"
         android:layout_width="match_parent"
@@ -31,7 +29,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +62,6 @@
 
             </LinearLayout>
 
-            <!-- Search Input Container -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/search_input_layout"
                 android:layout_width="match_parent"
@@ -94,7 +90,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Search Results Container -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/search_results_recycler"
                 android:layout_width="match_parent"
@@ -108,7 +103,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Selected Location Info Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/location_info_card"
         android:layout_width="match_parent"
@@ -173,7 +167,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Bottom Confirm Button -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -201,7 +194,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- New Zoom & Precision Controls -->
     <LinearLayout
         android:id="@+id/zoom_precision_controls"
         android:layout_width="wrap_content"
@@ -251,7 +243,6 @@
             android:tint="@color/primary_color" />
     </LinearLayout>
 
-    <!-- Loading Indicator -->
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loading_indicator"
         android:layout_width="wrap_content"

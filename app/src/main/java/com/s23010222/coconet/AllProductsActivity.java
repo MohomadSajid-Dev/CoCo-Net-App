@@ -56,7 +56,6 @@ public class AllProductsActivity extends AppCompatActivity {
 
         filteredPosts = new ArrayList<>(allPosts);
 
-        // Set title based on category
         if (category != null && category.equals("coconut")) {
             titleText.setText("All Coconut Deals");
         } else {
@@ -78,11 +77,9 @@ public class AllProductsActivity extends AppCompatActivity {
             }
         });
 
-        // Search functionality
         searchEditText.addTextChangedListener(new android.text.TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Not needed
             }
 
             @Override
@@ -92,7 +89,6 @@ public class AllProductsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(android.text.Editable s) {
-                // Not needed
             }
         });
     }

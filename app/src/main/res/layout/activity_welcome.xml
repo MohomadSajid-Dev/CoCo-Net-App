@@ -54,23 +54,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome_back_text">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/login_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/login_button_background"
+            app:backgroundTint="@null"
             android:text="Login"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/signup_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
+            app:backgroundTint="@null"
             android:text="Sign-up"
             android:textAllCaps="false"
             android:textColor="#808080"

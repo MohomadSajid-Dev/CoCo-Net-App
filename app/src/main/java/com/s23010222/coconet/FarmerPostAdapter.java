@@ -66,8 +66,8 @@ public class FarmerPostAdapter extends RecyclerView.Adapter<FarmerPostAdapter.Po
             tvProductName.setText(post.getProductName());
             tvPrice.setText("Rs " + post.getPrice());
             tvQuantity.setText("QTY: " + post.getQuantity());
-            tvQuantity.setTextColor(0xFF4CAF50); // Same green color as price
-            tvQuantity.setTypeface(tvQuantity.getTypeface(), android.graphics.Typeface.BOLD); // Make bold like price
+            tvQuantity.setTextColor(0xFF4CAF50);
+            tvQuantity.setTypeface(tvQuantity.getTypeface(), android.graphics.Typeface.BOLD);
             tvLocation.setText(post.getLocation());
             if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
                 Glide.with(itemView.getContext())

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -62,28 +63,70 @@
                 android:textSize="12sp"
                 android:textColor="#666666"
                 android:layout_marginTop="2dp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
+    <!-- Buttons section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavigation"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="Navigation"
+            android:background="@drawable/button_background3"
+            app:backgroundTint="@null"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelivered"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="Delivered"
+            android:background="@drawable/button_confirm_background2"
+            app:backgroundTint="@null"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- Replaced bottom styled section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/capsule_background"
+        android:padding="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:elevation="0dp">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="start">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Payment"
                 android:textSize="12sp"
-                android:textColor="#666666" />
+                android:textColor="#666666"
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/paymentAmount"
@@ -92,8 +135,8 @@
                 android:text="Rs 10 000"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+                android:textColor="#4CAF50"
+                android:layout_marginTop="2dp" />
 
         </LinearLayout>
 
@@ -109,7 +152,8 @@
                 android:layout_height="wrap_content"
                 android:text="QTY"
                 android:textSize="12sp"
-                android:textColor="#666666" />
+                android:textColor="#666666"
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/quantity"
@@ -118,8 +162,8 @@
                 android:text="100"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+                android:textColor="#4CAF50"
+                android:layout_marginTop="2dp" />
 
         </LinearLayout>
 
@@ -135,7 +179,8 @@
                 android:layout_height="wrap_content"
                 android:text="Order Status"
                 android:textSize="12sp"
-                android:textColor="#666666" />
+                android:textColor="#666666"
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/orderStatus"
@@ -145,7 +190,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#4CAF50"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="2dp" />
 
         </LinearLayout>
 

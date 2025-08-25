@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,6 +39,7 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
     private FusedLocationProviderClient fusedLocationClient;
     private FirebaseFirestore db;
     private int distributorCount = 0;
+    private java.util.Map<Marker, String> markerToDistributorId = new java.util.HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,6 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
         btnMyLocation = findViewById(R.id.btnMyLocation);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Set title for this activity
         titleText.setText("Locate Distributors");
 
         backButton.setOnClickListener(v -> onBackPressed());
@@ -75,7 +76,7 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
                         Address loc = addressList.get(0);
                         LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
                         mMap.clear();
-                        loadDistributorLocations(); // Reload distributor markers
+                        loadDistributorLocations();
                         mMap.addMarker(new MarkerOptions().position(latLng).title("Searched Location"));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                     } else {
@@ -102,7 +103,7 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
                         mMap.addMarker(new MarkerOptions()
                                 .position(myLatLng)
                                 .title("My Location")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                     } else {
                         Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show();
                     }
@@ -119,7 +120,7 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
         LatLng sriLankaCenter = new LatLng(7.8731, 80.7718);
-        loadDistributorLocations(); // Load distributor locations from database
+        loadDistributorLocations();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sriLankaCenter, 7.5f));
 
         mMap.getUiSettings().setZoomControlsEnabled(false);
@@ -130,19 +131,29 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
                 == android.content.pm.PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }
+
+        // Set marker click listener
+        mMap.setOnMarkerClickListener(marker -> {
+            String distributorId = markerToDistributorId.get(marker);
+            if (distributorId != null) {
+                // Open distributor profile
+                android.content.Intent intent = new android.content.Intent(this, DistributorViewProfileActivity.class);
+                intent.putExtra("distributor_id", distributorId);
+                startActivity(intent);
+                return true; // Consume the click event
+            }
+            return false; // Let default behavior handle other markers
+        });
     }
 
     private void loadDistributorLocations() {
-        // Reset distributor count
         distributorCount = 0;
 
-        // Query Firestore for all distributors
         db.collection("users")
                 .whereEqualTo("role", "Distributor")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        // Check if distributor has coordinates
                         Double latitude = document.getDouble("latitude");
                         Double longitude = document.getDouble("longitude");
                         String username = document.getString("username");
@@ -150,8 +161,8 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
 
                         if (latitude != null && longitude != null && username != null) {
                             LatLng distributorLocation = new LatLng(latitude, longitude);
+                            String distributorId = document.getId();
 
-                            // Create marker for distributor
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .position(distributorLocation)
                                     .title(username + " (Distributor)")
@@ -160,10 +171,12 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
                                     .draggable(false)
                                     .visible(true);
 
-                            mMap.addMarker(markerOptions);
+                            Marker marker = mMap.addMarker(markerOptions);
+                            if (marker != null) {
+                                markerToDistributorId.put(marker, distributorId);
+                            }
                             distributorCount++;
 
-                            // Log for debugging
                             System.out.println("Added distributor marker: " + username + " at " + latitude + ", " + longitude);
                         }
                     }
@@ -173,10 +186,61 @@ public class LocateDistributorsActivity extends AppCompatActivity implements OnM
                     } else {
                         Toast.makeText(this, "No distributors with locations found in database", Toast.LENGTH_LONG).show();
                     }
+
+                    loadCurrentUserLocation();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error loading distributor locations: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("Error loading distributors: " + e.getMessage());
+                });
+    }
+
+    private void loadCurrentUserLocation() {
+        // Get current user ID from SharedPreferences
+        android.content.SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String currentUserId = prefs.getString("farmer_id", "");
+        String role = prefs.getString("role", "");
+        boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
+
+        // Check if user is logged in and is a farmer
+        if (currentUserId.isEmpty() || !isLoggedIn || !"Farmer".equalsIgnoreCase(role)) {
+            System.out.println("Current user not logged in or not a farmer");
+            return;
+        }
+
+        // Fetch current user's location from database
+        db.collection("users")
+                .document(currentUserId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Double latitude = documentSnapshot.getDouble("latitude");
+                        Double longitude = documentSnapshot.getDouble("longitude");
+                        String username = documentSnapshot.getString("username");
+                        String city = documentSnapshot.getString("city");
+
+                        if (latitude != null && longitude != null && username != null) {
+                            LatLng userLocation = new LatLng(latitude, longitude);
+
+                            MarkerOptions markerOptions = new MarkerOptions()
+                                    .position(userLocation)
+                                    .title(username + " (You)")
+                                    .snippet(city != null ? city : "Your Location")
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                    .draggable(false)
+                                    .visible(true);
+
+                            mMap.addMarker(markerOptions);
+                            System.out.println("Added current user marker: " + username + " at " + latitude + ", " + longitude);
+                        } else {
+                            System.out.println("Current user location data not available");
+                        }
+                    } else {
+                        System.out.println("Current user document not found");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    System.out.println("Error loading current user location: " + e.getMessage());
                 });
     }
 

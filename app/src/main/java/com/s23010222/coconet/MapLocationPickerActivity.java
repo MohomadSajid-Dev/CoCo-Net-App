@@ -62,7 +62,6 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
     private ExecutorService executorService;
     private Handler mainHandler;
 
-    // UI Components
     private MaterialButton confirmButton;
     private ImageButton zoomInButton;
     private ImageButton zoomOutButton;
@@ -75,7 +74,6 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
     private ImageButton closeButton;
     private ImageButton clearSelectionButton;
 
-    // Data
     private List<Address> searchResults;
     private SearchResultsAdapter adapter;
 
@@ -84,22 +82,17 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_location_picker);
 
-        // Initialize services
         geocoder = new Geocoder(this, Locale.getDefault());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
         searchResults = new ArrayList<>();
 
-        // Initialize views
         initializeViews();
-
-        // Setup components
         setupRecyclerView();
         setupSearch();
         setupClickListeners();
 
-        // Initialize map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -120,7 +113,6 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
         closeButton = findViewById(R.id.btn_close);
         clearSelectionButton = findViewById(R.id.btn_clear_selection);
 
-        // Initial state
         confirmButton.setEnabled(false);
         locationInfoCard.setVisibility(View.GONE);
     }
@@ -142,7 +134,6 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
         clearSelectionButton.setOnClickListener(v -> clearSelection());
         precisionButton.setOnClickListener(v -> getCurrentLocation());
 
-        // Zoom controls
         zoomInButton.setOnClickListener(v -> {
             if (mMap != null) {
                 mMap.animateCamera(CameraUpdateFactory.zoomIn());
@@ -160,24 +151,20 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Apply custom map style
         try {
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
         } catch (Exception e) {
             Log.e(TAG, "Error applying map style: " + e.getMessage());
         }
 
-        // Set default location to Sri Lanka (Colombo)
         LatLng sriLanka = new LatLng(6.9271, 79.8612);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sriLanka, 10));
 
-        // Enable map interactions
         mMap.setOnMapClickListener(this::selectLocation);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setCompassEnabled(true);
 
-        // Try to enable location if permission is granted
         enableMyLocationIfPermitted();
     }
 
@@ -243,33 +230,25 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
         clearSearchResults();
         searchEditText.setText(selectedLocationName);
 
-        // Hide keyboard
         searchEditText.clearFocus();
     }
 
     private void selectLocation(LatLng location) {
-        // Remove previous marker
         if (selectedLocationMarker != null) {
             selectedLocationMarker.remove();
         }
 
-        // Add new marker with custom icon
         selectedLocationMarker = mMap.addMarker(new MarkerOptions()
                 .position(location)
                 .title("Selected Location"));
 
-        // Store selected location
         selectedLocation = location;
 
-        // Get address from coordinates if not already set
         if (selectedLocationName == null) {
             getAddressFromLocation(location);
         }
 
-        // Update UI
         updateLocationUI();
-
-        // Move camera to selected location with animation
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
     }
 
@@ -279,7 +258,6 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
             locationInfoCard.setVisibility(View.VISIBLE);
             confirmButton.setEnabled(true);
 
-            // Update marker title
             if (selectedLocationMarker != null) {
                 selectedLocationMarker.setTitle(selectedLocationName);
             }
@@ -442,7 +420,6 @@ public class MapLocationPickerActivity extends AppCompatActivity implements OnMa
         super.onBackPressed();
     }
 
-    // RecyclerView Adapter for search results
     private class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultViewHolder> {
 
         @NonNull

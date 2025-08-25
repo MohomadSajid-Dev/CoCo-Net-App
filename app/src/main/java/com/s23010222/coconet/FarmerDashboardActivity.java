@@ -1,6 +1,7 @@
 package com.s23010222.coconet;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,6 +30,7 @@ public class FarmerDashboardActivity extends AppCompatActivity {
     private CircleImageView profileImage;
     private LinearLayout addPostLayout;
     private TextView seeAllText;
+    private TextView usernameText;
     private RecyclerView recyclerViewPosts;
 
     private LinearLayout homeTab, locationTab, ordersTab, notificationTab, menuTab;
@@ -49,6 +51,7 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         setupRecyclerView();
         setupListeners();
         loadFarmerPosts();
+        setupUserData();
     }
 
     private void initViews() {
@@ -56,7 +59,8 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImage);
         addPostLayout = findViewById(R.id.addPostLayout);
         seeAllText = findViewById(R.id.seeAllText);
-        recyclerViewPosts = findViewById(R.id.recyclerViewPosts); // Add this to your XML
+        usernameText = findViewById(R.id.usernameText);
+        recyclerViewPosts = findViewById(R.id.recyclerViewPosts);
 
         homeTab = findViewById(R.id.homeTab);
         locationTab = findViewById(R.id.locationTab);
@@ -98,6 +102,8 @@ public class FarmerDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(FarmerDashboardActivity.this, PostAdActivity.class);
             startActivity(intent);
         });
+
+
 
         seeAllText.setOnClickListener(v -> {
             openAllProductsActivity("all", farmerPosts);
@@ -149,7 +155,6 @@ public class FarmerDashboardActivity extends AppCompatActivity {
                         post.setImageUrl(document.getString("imageUrl"));
                         post.setFarmerId(document.getString("farmerId"));
 
-                        // Load coordinates if available
                         Double latitude = document.getDouble("latitude");
                         Double longitude = document.getDouble("longitude");
                         if (latitude != null && longitude != null) {
@@ -168,20 +173,31 @@ public class FarmerDashboardActivity extends AppCompatActivity {
 
     private void performSearch(String searchText) {
         Toast.makeText(this, "Searching for: " + searchText, Toast.LENGTH_SHORT).show();
-        // Implement search functionality here
     }
 
     private void openAllProductsActivity(String category, List<FarmerPost> posts) {
         Intent intent = new Intent(this, AllProductsActivity.class);
         intent.putExtra("category", category);
-        // Pass all posts to the AllProductsActivity
         intent.putParcelableArrayListExtra("all_posts", new ArrayList<>(posts));
         startActivity(intent);
+    }
+
+    private void setupUserData() {
+        // Set username from shared preferences
+        String username = getUserName();
+        if (usernameText != null) {
+            usernameText.setText(username);
+        }
+    }
+
+    private String getUserName() {
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        return prefs.getString("username", "User");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadFarmerPosts(); // Refresh posts when returning to dashboard
+        loadFarmerPosts();
     }
 }

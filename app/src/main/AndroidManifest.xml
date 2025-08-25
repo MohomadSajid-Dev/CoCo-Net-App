@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Required permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -14,6 +13,7 @@
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -30,7 +30,6 @@
         android:theme="@style/Theme.CoCoNet"
         tools:targetApi="31">
 
-        <!-- Launcher Activity -->
         <activity
             android:name=".GetstartActivity"
             android:exported="true">
@@ -40,7 +39,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Existing Activities -->
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".CreateAccountActivity"/>
@@ -55,13 +53,18 @@
         <activity android:name=".DistributorDashboardActivity"/>
         <activity android:name=".AllProductsActivity"/>
         <activity android:name=".LocateFarmersActivity"/>
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".CreateOrderActivity" />
+        <activity android:name=".FarmerProfileActivity" />
+        <activity android:name=".MapLocationPickerActivity" android:label="Select Location"/>
+        <activity android:name=".SettingsActivity" android:label="Settings" />
+        <activity android:name=".DistributorNotificationActivity" android:label="Notifications" />
+        <activity android:name=".DistributorOrdersActivity" android:label="New Orders" />
+        <activity android:name=".DistributorProfileActivity" android:label="Profile" />
+        <activity android:name=".DistributorViewProfileActivity" android:label="View Profile" />
+        <activity android:name=".DeliveredOrdersActivity" android:label="Delivered Orders" />
 
-        <!-- ✅ Newly Added Activity -->
-        <activity
-            android:name=".MapLocationPickerActivity"
-            android:label="Select Location"/>
 
-        <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAW8e-BygqUFmvGcJDFIAai08BYginwhao" />

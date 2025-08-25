@@ -50,12 +50,10 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
         registerLink = findViewById(R.id.register_link);
-
         googleLogin = findViewById(R.id.google_login);
         twitterLogin = findViewById(R.id.twitter_login);
         instagramLogin = findViewById(R.id.instagram_login);
         facebookLogin = findViewById(R.id.facebook_login);
-
         loadingOverlay = findViewById(R.id.loading_overlay);
         loginLottie = findViewById(R.id.login_lottie);
     }
@@ -110,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 loadingOverlay.setVisibility(View.GONE);
                 loginButton.setEnabled(false);
                 performLogin(username, password);
-            }, 4000); // 4 seconds
+            }, 4000);
         }
     }
 
@@ -126,14 +124,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         if (!task.getResult().isEmpty()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Get user data
                                 String userId = document.getId();
                                 String role = document.getString("role");
                                 String city = document.getString("city");
                                 String name = document.getString("username");
                                 String email = document.getString("email");
 
-                                // Save user data to SharedPreferences
                                 saveUserDataToPreferences(userId, name, email, role, city);
 
                                 Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
@@ -168,7 +164,19 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString("farmer_id", userId);
+        // Save user ID based on role
+        if ("Farmer".equalsIgnoreCase(role)) {
+            editor.putString("farmer_id", userId);
+            editor.putString("distributor_id", ""); // Clear distributor ID
+        } else if ("Distributor".equalsIgnoreCase(role)) {
+            editor.putString("distributor_id", userId);
+            editor.putString("farmer_id", ""); // Clear farmer ID
+        } else {
+            // Default to farmer for unknown roles
+            editor.putString("farmer_id", userId);
+            editor.putString("distributor_id", "");
+        }
+
         editor.putString("username", username);
         editor.putString("email", email);
         editor.putString("role", role);

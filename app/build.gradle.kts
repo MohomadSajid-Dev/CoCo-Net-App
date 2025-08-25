@@ -64,4 +64,6 @@ dependencies {
     implementation ("com.google.android.material:material:1.10.0")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.airbnb.android:lottie:6.4.0")
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.28")
+    implementation("com.google.code.gson:gson:2.10.1")
 }

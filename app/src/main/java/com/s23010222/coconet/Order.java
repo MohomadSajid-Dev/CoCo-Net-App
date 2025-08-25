@@ -10,9 +10,12 @@ public class Order {
     private String quantity;
     private String orderStatus;
     private int profileImage;
+    private String distributorId;
+    private String distributorCity;
 
     public Order(String orderId, String productName, String customerName, String location,
-                 String orderDateTime, String paymentAmount, String quantity, String orderStatus, int profileImage) {
+                 String orderDateTime, String paymentAmount, String quantity, String orderStatus, int profileImage,
+                 String distributorId, String distributorCity) {
         this.orderId = orderId;
         this.productName = productName;
         this.customerName = customerName;
@@ -22,6 +25,8 @@ public class Order {
         this.quantity = quantity;
         this.orderStatus = orderStatus;
         this.profileImage = profileImage;
+        this.distributorId = distributorId;
+        this.distributorCity = distributorCity;
     }
 
     public String getOrderId() { return orderId; }
@@ -33,6 +38,10 @@ public class Order {
     public String getQuantity() { return quantity; }
     public String getOrderStatus() { return orderStatus; }
     public int getProfileImage() { return profileImage; }
+    public String getDistributorId() { return distributorId; }
+    public void setDistributorId(String distributorId) { this.distributorId = distributorId; }
+    public String getDistributorCity() { return distributorCity; }
+    public void setDistributorCity(String distributorCity) { this.distributorCity = distributorCity; }
 
     public void setOrderId(String orderId) { this.orderId = orderId; }
     public void setProductName(String productName) { this.productName = productName; }

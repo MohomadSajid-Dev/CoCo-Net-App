@@ -61,6 +61,7 @@
         android:paddingHorizontal="24dp"
         android:paddingTop="24dp">
 
+        <!-- View Profile -->
         <LinearLayout
             android:id="@+id/view_profile_layout"
             android:layout_width="match_parent"
@@ -96,6 +97,7 @@
             android:background="#E0E0E0"
             android:layout_marginVertical="4dp" />
 
+        <!-- Orders -->
         <LinearLayout
             android:id="@+id/orders_layout"
             android:layout_width="match_parent"
@@ -131,8 +133,9 @@
             android:background="#E0E0E0"
             android:layout_marginVertical="4dp" />
 
+        <!-- ✅ Delivered Orders (newly added) -->
         <LinearLayout
-            android:id="@+id/delivery_status_layout"
+            android:id="@+id/delivered_orders_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -145,7 +148,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/status"
+                android:src="@drawable/delivered"
                 android:layout_marginEnd="20dp"
                 android:tint="#333333" />
 
@@ -153,7 +156,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Delivery Status"
+                android:text="Delivered Orders"
                 android:textSize="16sp"
                 android:textColor="#333333"
                 android:fontFamily="sans-serif" />
@@ -166,6 +169,7 @@
             android:background="#E0E0E0"
             android:layout_marginVertical="4dp" />
 
+        <!-- Settings -->
         <LinearLayout
             android:id="@+id/settings_layout"
             android:layout_width="match_parent"
@@ -201,6 +205,7 @@
             android:background="#E0E0E0"
             android:layout_marginVertical="4dp" />
 
+        <!-- Logout -->
         <LinearLayout
             android:id="@+id/logout_layout"
             android:layout_width="match_parent"

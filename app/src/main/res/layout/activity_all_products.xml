@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -42,7 +41,6 @@
 
     </LinearLayout>
 
-    <!-- Search Bar -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -84,13 +82,11 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Main Content -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- RecyclerView for all posts -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewAllPosts"
             android:layout_width="match_parent"
@@ -100,7 +96,6 @@
             android:overScrollMode="never"
             android:scrollbars="vertical" />
 
-        <!-- No posts message -->
         <TextView
             android:id="@+id/noPostsText"
             android:layout_width="wrap_content"

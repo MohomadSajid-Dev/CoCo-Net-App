@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors -->
-    <color name="primary">#4CAF50</color> <!-- Green from first file -->
+    <color name="primary">#4CAF50</color>
     <color name="primary_color">#2196F3</color>
     <color name="primary_dark">#1976D2</color>
     <color name="primary_light">#BBDEFB</color>
-
-    <!-- Background Colors -->
     <color name="background_color">#F5F5F5</color>
     <color name="surface_color">#FFFFFF</color>
     <color name="light_gray">#E0E0E0</color>
-    <color name="inactive_gray">#E0E0E0</color> <!-- Duplicate value but kept for name reference -->
-
-    <!-- Text Colors -->
+    <color name="inactive_gray">#E0E0E0</color>
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
     <color name="text_hint">#BDBDBD</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#808080</color>
-
-    <!-- Button and Stroke Colors -->
     <color name="button_secondary">#F5F5F5</color>
     <color name="stroke_color">#E0E0E0</color>
-
-    <!-- Other Colors -->
     <color name="track_color">#E3F2FD</color>
     <color name="divider_color">#EEEEEE</color>
     <color name="blue">#085099</color>
     <color name="active_blue">#002366</color>
-
-    <!-- Status Colors -->
-    <color name="success_color">#4CAF50</color> <!-- Same as primary -->
+    <color name="success_color">#4CAF50</color>
     <color name="error_color">#F44336</color>
     <color name="warning_color">#FF9800</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <attr name="colorBackground" format="color"/>
+    <color name="primary_color_light">#FFBB86FC</color>
+    <color name="green">#4CAF50</color>
+    <color name="input_background">#FAFAFA</color>
+    <color name="input_stroke">#E0E0E0</color>
+    <color name="input_stroke_focused">#2196F3</color>
+    <color name="farmer_primary">#4CAF50</color>
+    <color name="farmer_primary_dark">#2E7D32</color>
+    <color name="farmer_accent">#8BC34A</color>
+    <color name="farmer_background">#F1F8E9</color>
+    <color name="farmer_surface">#FFFFFF</color>
+    <color name="distributor_primary">#1976D2</color>
+    <color name="distributor_primary_dark">#1565C0</color>
+    <color name="distributor_accent">#42A5F5</color>
+    <color name="distributor_background">#E3F2FD</color>
+    <color name="distributor_surface">#FFFFFF</color>
+    <color name="gray_50">#FAFAFA</color>
+    <color name="gray_100">#F5F5F5</color>
+    <color name="gray_200">#EEEEEE</color>
+    <color name="gray_400">#BDBDBD</color>
+    <color name="gray_600">#757575</color>
+    <color name="gray_800">#424242</color>
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FF9800</color>
+    <color name="error">#F44336</color>
+    <color name="info">#2196F3</color>
+    <color name="accent_color">#2196F3</color>
+
 </resources>

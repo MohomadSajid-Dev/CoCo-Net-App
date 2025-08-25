@@ -292,11 +292,12 @@
                     android:textColorHint="#999999"
                     android:textSize="16sp" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_post_ad"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/button_background"
+                    app:backgroundTint="@null"
                     android:text="Post"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"

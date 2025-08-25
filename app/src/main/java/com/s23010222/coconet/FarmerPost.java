@@ -19,10 +19,8 @@ public class FarmerPost implements Parcelable {
     private Double latitude;
     private Double longitude;
 
-    // Default constructor required for Firebase/Firestore
     public FarmerPost() {}
 
-    // Full constructor (optional if needed)
     public FarmerPost(String id, String productName, String description, String quantity,
                       String price, String availability, String stockCondition,
                       String mobileNumber, String location, Long timestamp,
@@ -43,7 +41,6 @@ public class FarmerPost implements Parcelable {
         this.longitude = longitude;
     }
 
-    // Parcelable implementation
     protected FarmerPost(Parcel in) {
         id = in.readString();
         productName = in.readString();
@@ -123,7 +120,6 @@ public class FarmerPost implements Parcelable {
         return 0;
     }
 
-    // Getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

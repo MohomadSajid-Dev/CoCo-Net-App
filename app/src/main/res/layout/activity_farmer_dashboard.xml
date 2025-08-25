@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <!-- Header Section with Gradient -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -29,6 +28,7 @@
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
+                android:id="@+id/usernameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username"
@@ -48,7 +48,6 @@
 
     </LinearLayout>
 
-    <!-- Search Bar -->
     <androidx.cardview.widget.CardView
         android:id="@+id/searchCard"
         android:layout_width="match_parent"
@@ -82,7 +81,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Main Content ScrollView -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -96,7 +94,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Banner ViewPager -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,7 +134,6 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!-- Page Indicator -->
             <LinearLayout
                 android:id="@+id/dotsIndicator"
                 android:layout_width="wrap_content"
@@ -160,7 +156,6 @@
 
             </LinearLayout>
 
-            <!-- Your Coconut Posts Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -188,7 +183,6 @@
 
             </LinearLayout>
 
-            <!-- Add Post Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -224,7 +218,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Posts Grid using RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewPosts"
                 android:layout_width="match_parent"
@@ -232,7 +225,8 @@
                 android:layout_marginBottom="30dp"
                 android:nestedScrollingEnabled="false" />
 
-            <!-- Your Other Posts Section -->
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -260,7 +254,6 @@
 
             </LinearLayout>
 
-            <!-- Other Posts Grid - You can also convert this to RecyclerView if needed -->
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -270,7 +263,6 @@
                 android:useDefaultMargins="true"
                 android:layout_marginBottom="20dp">
 
-                <!-- Add Other Post Card -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="160dp"
@@ -301,7 +293,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Other Product Card 1 -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/otherProductCard1"
                     android:layout_width="0dp"
@@ -354,7 +345,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Other Product Card 2 -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/otherProductCard2"
                     android:layout_width="0dp"
@@ -406,7 +396,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Other Product Card 3 -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/otherProductCard3"
                     android:layout_width="0dp"
@@ -464,7 +453,6 @@
 
     </ScrollView>
 
-    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

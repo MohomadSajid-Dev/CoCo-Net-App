@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,6 +39,7 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
     private FusedLocationProviderClient fusedLocationClient;
     private FirebaseFirestore db;
     private int farmerCount = 0;
+    private java.util.Map<Marker, String> markerToFarmerId = new java.util.HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,6 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
         btnMyLocation = findViewById(R.id.btnMyLocation);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Set title for this activity
         titleText.setText("Locate Farmers");
 
         backButton.setOnClickListener(v -> onBackPressed());
@@ -75,7 +76,7 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                         Address loc = addressList.get(0);
                         LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
                         mMap.clear();
-                        loadFarmerLocations(); // Reload farmer markers
+                        loadFarmerLocations();
                         mMap.addMarker(new MarkerOptions().position(latLng).title("Searched Location"));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                     } else {
@@ -102,7 +103,7 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                         mMap.addMarker(new MarkerOptions()
                                 .position(myLatLng)
                                 .title("My Location")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                     } else {
                         Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show();
                     }
@@ -119,7 +120,7 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
         LatLng sriLankaCenter = new LatLng(7.8731, 80.7718);
-        loadFarmerLocations(); // Load farmer locations from database
+        loadFarmerLocations();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sriLankaCenter, 7.5f));
 
         mMap.getUiSettings().setZoomControlsEnabled(false);
@@ -130,19 +131,29 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                 == android.content.pm.PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }
+
+        // Set marker click listener
+        mMap.setOnMarkerClickListener(marker -> {
+            String farmerId = markerToFarmerId.get(marker);
+            if (farmerId != null) {
+                // Open farmer profile
+                android.content.Intent intent = new android.content.Intent(this, FarmerProfileActivity.class);
+                intent.putExtra("farmer_id", farmerId);
+                startActivity(intent);
+                return true; // Consume the click event
+            }
+            return false; // Let default behavior handle other markers
+        });
     }
 
     private void loadFarmerLocations() {
-        // Reset farmer count
         farmerCount = 0;
 
-        // Query Firestore for all farmers
         db.collection("users")
                 .whereEqualTo("role", "Farmer")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        // Check if farmer has coordinates
                         Double latitude = document.getDouble("latitude");
                         Double longitude = document.getDouble("longitude");
                         String username = document.getString("username");
@@ -150,8 +161,8 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
 
                         if (latitude != null && longitude != null && username != null) {
                             LatLng farmerLocation = new LatLng(latitude, longitude);
+                            String farmerId = document.getId();
 
-                            // Create marker for farmer
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .position(farmerLocation)
                                     .title(username + " (Farmer)")
@@ -160,10 +171,12 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                                     .draggable(false)
                                     .visible(true);
 
-                            mMap.addMarker(markerOptions);
+                            Marker marker = mMap.addMarker(markerOptions);
+                            if (marker != null) {
+                                markerToFarmerId.put(marker, farmerId);
+                            }
                             farmerCount++;
 
-                            // Log for debugging
                             System.out.println("Added farmer marker: " + username + " at " + latitude + ", " + longitude);
                         }
                     }
@@ -174,8 +187,8 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                         Toast.makeText(this, "No farmers with locations found in database", Toast.LENGTH_LONG).show();
                     }
 
-                    // Also load farmer posts with locations
                     loadFarmerPostsWithLocations();
+                    loadCurrentUserLocation();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error loading farmer locations: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -184,13 +197,11 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void loadFarmerPostsWithLocations() {
-        // Query Firestore for farmer posts with coordinates
         db.collection("farmer_posts")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     int postCount = 0;
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        // Check if post has coordinates
                         Double latitude = document.getDouble("latitude");
                         Double longitude = document.getDouble("longitude");
                         String productName = document.getString("productName");
@@ -200,19 +211,17 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                         if (latitude != null && longitude != null && productName != null) {
                             LatLng postLocation = new LatLng(latitude, longitude);
 
-                            // Create marker for farmer post
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .position(postLocation)
                                     .title(productName)
                                     .snippet("Price: " + (price != null ? price : "N/A") + " | Location: " + (location != null ? location : "N/A"))
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                                     .draggable(false)
                                     .visible(true);
 
                             mMap.addMarker(markerOptions);
                             postCount++;
 
-                            // Log for debugging
                             System.out.println("Added post marker: " + productName + " at " + latitude + ", " + longitude);
                         }
                     }
@@ -223,7 +232,6 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                         Toast.makeText(this, "No farmer posts with locations found", Toast.LENGTH_SHORT).show();
                     }
 
-                    // Show total summary
                     int totalMarkers = farmerCount + postCount;
                     if (totalMarkers == 0) {
                         Toast.makeText(this, "No location data found. Farmers need to register with their locations first.", Toast.LENGTH_LONG).show();
@@ -232,6 +240,55 @@ public class LocateFarmersActivity extends AppCompatActivity implements OnMapRea
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error loading farmer posts: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("Error loading posts: " + e.getMessage());
+                });
+    }
+
+    private void loadCurrentUserLocation() {
+        // Get current user ID from SharedPreferences
+        android.content.SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String currentUserId = prefs.getString("distributor_id", "");
+        String role = prefs.getString("role", "");
+        boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
+
+        // Check if user is logged in and is a distributor
+        if (currentUserId.isEmpty() || !isLoggedIn || !"Distributor".equalsIgnoreCase(role)) {
+            System.out.println("Current user not logged in or not a distributor");
+            return;
+        }
+
+        // Fetch current user's location from database
+        db.collection("users")
+                .document(currentUserId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Double latitude = documentSnapshot.getDouble("latitude");
+                        Double longitude = documentSnapshot.getDouble("longitude");
+                        String username = documentSnapshot.getString("username");
+                        String city = documentSnapshot.getString("city");
+
+                        if (latitude != null && longitude != null && username != null) {
+                            LatLng userLocation = new LatLng(latitude, longitude);
+
+                            MarkerOptions markerOptions = new MarkerOptions()
+                                    .position(userLocation)
+                                    .title(username + " (You)")
+                                    .snippet(city != null ? city : "Your Location")
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                    .draggable(false)
+                                    .visible(true);
+
+                            mMap.addMarker(markerOptions);
+                            System.out.println("Added current user marker: " + username + " at " + latitude + ", " + longitude);
+                        } else {
+                            System.out.println("Current user location data not available");
+                        }
+                    } else {
+                        System.out.println("Current user document not found");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    System.out.println("Error loading current user location: " + e.getMessage());
                 });
     }
 
