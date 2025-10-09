@@ -59,7 +59,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAW8e-BygqUFmvGcJDFIAai08BYginwhao" />
+            android:value="Add Your Link Here" />
 
     </application>
 
