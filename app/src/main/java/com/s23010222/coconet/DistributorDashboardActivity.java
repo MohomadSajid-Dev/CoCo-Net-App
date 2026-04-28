@@ -175,6 +175,7 @@ public class DistributorDashboardActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< HEAD
         // Add text change listener for search functionality
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -195,6 +196,8 @@ public class DistributorDashboardActivity extends AppCompatActivity {
             }
         });
 
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         seeAllText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,6 +256,7 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     }
 
     private void setupUserData() {
+<<<<<<< HEAD
         // Set username from shared preferences or default
         String username = getUserName();
         if (usernameText != null) {
@@ -275,6 +279,14 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     private void openSearchActivity() {
         // For distributors, this could open a search activity to find specific products
         Toast.makeText(this, "Search functionality coming soon", Toast.LENGTH_SHORT).show();
+=======
+    }
+
+    private void openProfileActivity() {
+    }
+
+    private void openSearchActivity() {
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
     }
 
     private void openAllProductsActivity(String category, List<FarmerPost> allPosts) {
@@ -290,6 +302,7 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     }
 
     private void openOrdersActivity() {
+<<<<<<< HEAD
         Intent intent = new Intent(this, DistributorOrdersActivity.class);
         startActivity(intent);
     }
@@ -302,12 +315,21 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     private void openMenuActivity() {
         Intent intent = new Intent(this, DistributorProfileActivity.class);
         startActivity(intent);
+=======
+    }
+
+    private void openNotificationActivity() {
+    }
+
+    private void openMenuActivity() {
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
     }
 
     private void refreshDashboard() {
         loadFarmerPosts();
     }
 
+<<<<<<< HEAD
     private void performSearch(String searchText) {
         // Filter posts based on search text
         List<FarmerPost> filteredPosts = new ArrayList<>();
@@ -332,6 +354,10 @@ public class DistributorDashboardActivity extends AppCompatActivity {
     private String getUserName() {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         return prefs.getString("username", "User");
+=======
+    private String getUserName() {
+        return "Username";
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
     }
 
     private String getUserProfileImageUrl() {

@@ -150,10 +150,13 @@ public class ViewAdActivity extends AppCompatActivity {
                         } else {
                             ivProductImage.setImageResource(R.drawable.img);
                         }
+<<<<<<< HEAD
                         // Store loaded farmerId and farmerName for use in Buy Now
                         loadedFarmerId = farmerId;
                         loadedFarmerName = farmerName;
 
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
                         if (farmerId != null && !farmerId.isEmpty()) {
                             loadFarmerDetails(farmerId);
                         } else {
@@ -185,7 +188,10 @@ public class ViewAdActivity extends AppCompatActivity {
                     if (userSnapshot.exists()) {
                         String email = userSnapshot.getString("email");
                         String location = userSnapshot.getString("location");
+<<<<<<< HEAD
                         String farmerName = userSnapshot.getString("name");
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
                         tvEmail.setText(email != null ? email : "Email not available");
                         if (location != null && !location.isEmpty()) {
                             tvLocation.setText(location);
@@ -231,7 +237,10 @@ public class ViewAdActivity extends AppCompatActivity {
     }
 
     private void hideLoadingState() {
+<<<<<<< HEAD
         // Optionally implement any UI state reset after loading
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
     }
 
     private void showMenuOptions() {

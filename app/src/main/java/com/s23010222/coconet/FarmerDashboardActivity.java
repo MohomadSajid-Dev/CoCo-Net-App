@@ -59,7 +59,10 @@ public class FarmerDashboardActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImage);
         addPostLayout = findViewById(R.id.addPostLayout);
         seeAllText = findViewById(R.id.seeAllText);
+<<<<<<< HEAD
         usernameText = findViewById(R.id.usernameText);
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         recyclerViewPosts = findViewById(R.id.recyclerViewPosts);
 
         homeTab = findViewById(R.id.homeTab);

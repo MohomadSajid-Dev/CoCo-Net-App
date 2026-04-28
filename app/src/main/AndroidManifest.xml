@@ -64,10 +64,16 @@
         <activity android:name=".DistributorViewProfileActivity" android:label="View Profile" />
         <activity android:name=".DeliveredOrdersActivity" android:label="Delivered Orders" />
 
+<<<<<<< HEAD
+=======
+        <activity
+            android:name=".MapLocationPickerActivity"
+            android:label="Select Location"/>
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAW8e-BygqUFmvGcJDFIAai08BYginwhao" />
+            android:value="Add Your Link Here" />
 
     </application>
 

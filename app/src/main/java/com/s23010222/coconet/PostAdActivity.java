@@ -115,7 +115,10 @@ public class PostAdActivity extends AppCompatActivity {
 
     /** ========== IMAGE PICKER MERGED FROM 1ST CODE ========== **/
     private void setupImageLaunchers() {
+<<<<<<< HEAD
         // Camera
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -128,7 +131,10 @@ public class PostAdActivity extends AppCompatActivity {
                     }
                 });
 
+<<<<<<< HEAD
         // Gallery
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -168,12 +174,114 @@ public class PostAdActivity extends AppCompatActivity {
     }
 
     private void openGallery() {
+<<<<<<< HEAD
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickPhoto.setType("image/*");
         galleryLauncher.launch(pickPhoto);
     }
 
     private void setMainImage(Bitmap bitmap, Uri uri) {
+=======
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            handleAndroid14PlusGalleryAccess();
+        } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            handleAndroid13GalleryAccess();
+        } else {
+            handleLegacyGalleryAccess();
+        }
+    }
+
+    private void handleAndroid14PlusGalleryAccess() {
+        String[] permissions = {
+                Manifest.permission.READ_MEDIA_IMAGES,
+                "android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
+        };
+
+        boolean hasFullAccess = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean hasPartialAccess = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+                ContextCompat.checkSelfPermission(this, "android.permission.READ_MEDIA_VISUAL_USER_SELECTED")
+                        == PackageManager.PERMISSION_GRANTED;
+
+        if (hasFullAccess || hasPartialAccess) {
+            launchGalleryIntent();
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, READ_MEDIA_IMAGES_PERMISSION_CODE);
+        }
+    }
+
+    private void handleAndroid13GalleryAccess() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_MEDIA_IMAGES},
+                    READ_MEDIA_IMAGES_PERMISSION_CODE);
+        } else {
+            launchGalleryIntent();
+        }
+    }
+
+    private void handleLegacyGalleryAccess() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE_PERMISSION_CODE);
+        } else {
+            launchGalleryIntent();
+        }
+    }
+
+    private void launchGalleryIntent() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galleryIntent.setType("image/*");
+        if (galleryIntent.resolveActivity(getPackageManager()) != null) {
+            galleryLauncher.launch(galleryIntent);
+        } else {
+            Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case CAMERA_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
+                } else {
+                    Toast.makeText(this, "Camera permission is required to take photos", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case READ_MEDIA_IMAGES_PERMISSION_CODE:
+                boolean hasFullAccess = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean hasPartialAccess = grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                if (hasFullAccess) {
+                    Toast.makeText(this, "Full media access granted", Toast.LENGTH_SHORT).show();
+                    launchGalleryIntent();
+                } else if (hasPartialAccess) {
+                    Toast.makeText(this, "Selected photos access granted", Toast.LENGTH_SHORT).show();
+                    launchGalleryIntent();
+                } else {
+                    Toast.makeText(this, "Media access permission is required to select images", Toast.LENGTH_LONG).show();
+                }
+                break;
+
+            case READ_EXTERNAL_STORAGE_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    launchGalleryIntent();
+                } else {
+                    Toast.makeText(this, "Storage permission is required to access gallery", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    private void setMainImage(Bitmap bitmap) {
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         mainImageContainer.removeAllViews();
         mainImageView = new ImageView(this);
         mainImageView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -277,7 +385,10 @@ public class PostAdActivity extends AppCompatActivity {
     }
 
     private void savePostToFirestore(String productName, String description, String quantity, String price, String mobileNumber, String availability, String stockCondition, String farmerId, String imageUrl) {
+<<<<<<< HEAD
         // same logic from your 2nd code (with Notification + location check)
+=======
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         db.collection("users")
                 .document(farmerId)
                 .get()
@@ -300,7 +411,43 @@ public class PostAdActivity extends AppCompatActivity {
                         String location = documentSnapshot.getString("city");
                         postData.put("latitude", latitude);
                         postData.put("longitude", longitude);
+<<<<<<< HEAD
                         postData.put("location", location != null ? location : "");
+=======
+
+                        db.collection("farmer_posts")
+                                .add(postData)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(PostAdActivity.this, "Ad posted successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(PostAdActivity.this, "Failed to post ad: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        Map<String, Object> postData = new HashMap<>();
+                        postData.put("productName", productName);
+                        postData.put("description", description);
+                        postData.put("quantity", quantity);
+                        postData.put("price", price);
+                        postData.put("mobileNumber", mobileNumber);
+                        postData.put("availability", availability);
+                        postData.put("stockCondition", stockCondition);
+                        postData.put("timestamp", System.currentTimeMillis());
+                        postData.put("farmerId", farmerId);
+                        postData.put("imageUrl", imageUrl);
+                        postData.put("location", "");
+
+                        db.collection("farmer_posts")
+                                .add(postData)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(PostAdActivity.this, "Ad posted successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(PostAdActivity.this, "Failed to post ad: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
                     }
 
                     db.collection("farmer_posts")
@@ -332,15 +479,27 @@ public class PostAdActivity extends AppCompatActivity {
 
     private String getExtensionFromMimeType(String mimeType) {
         if (mimeType == null) return "jpg";
+<<<<<<< HEAD
         if (mimeType.contains("png")) return "png";
         if (mimeType.contains("webp")) return "webp";
+=======
+        if (mimeType.equals("image/png")) return "png";
+        if (mimeType.equals("image/jpeg")) return "jpg";
+        if (mimeType.equals("image/jpg")) return "jpg";
+        if (mimeType.equals("image/webp")) return "webp";
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         return "jpg";
     }
 
     private Bitmap.CompressFormat getCompressFormatFromMimeType(String mimeType) {
         if (mimeType == null) return Bitmap.CompressFormat.JPEG;
+<<<<<<< HEAD
         if (mimeType.contains("png")) return Bitmap.CompressFormat.PNG;
         if (mimeType.contains("webp")) return Bitmap.CompressFormat.WEBP;
+=======
+        if (mimeType.equals("image/png")) return Bitmap.CompressFormat.PNG;
+        if (mimeType.equals("image/webp")) return Bitmap.CompressFormat.WEBP;
+>>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
         return Bitmap.CompressFormat.JPEG;
     }
 }
