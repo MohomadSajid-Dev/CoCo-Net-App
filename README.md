@@ -1,6 +1,6 @@
 # CoCo Net
 
-CoCo Net is an Android app that connects coconut farmers and distributors. Farmers can post ads, create orders, and locate distributors. Distributors can browse products, manage orders, and locate farmers.
+CoCo Net is an Android app that connects coconut farmers and distributors. Farmers can post ads, create orders and locate distributors. Distributors can browse products, manage orders, and locate farmers.
 
 ## Tech Stack
 
