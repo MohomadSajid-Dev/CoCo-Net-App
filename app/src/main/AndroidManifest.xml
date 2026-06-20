@@ -31,7 +31,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".GetstartActivity"
+            android:name=".ui.onboarding.GetstartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,37 +39,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WelcomeActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".CreateAccountActivity"/>
-        <activity android:name=".OTPVerificationActivity"/>
-        <activity android:name=".FarmerDashboardActivity" />
-        <activity android:name=".LocateDistributorsActivity" />
-        <activity android:name=".NewOrdersActivity" />
-        <activity android:name=".NotificationActivity" />
-        <activity android:name=".PostAdActivity" />
-        <activity android:name=".ViewAdActivity" />
-        <activity android:name=".ProfileActivity"/>
-        <activity android:name=".DistributorDashboardActivity"/>
-        <activity android:name=".AllProductsActivity"/>
-        <activity android:name=".LocateFarmersActivity"/>
-        <activity android:name=".PaymentActivity" />
-        <activity android:name=".CreateOrderActivity" />
-        <activity android:name=".FarmerProfileActivity" />
-        <activity android:name=".MapLocationPickerActivity" android:label="Select Location"/>
-        <activity android:name=".SettingsActivity" android:label="Settings" />
-        <activity android:name=".DistributorNotificationActivity" android:label="Notifications" />
-        <activity android:name=".DistributorOrdersActivity" android:label="New Orders" />
-        <activity android:name=".DistributorProfileActivity" android:label="Profile" />
-        <activity android:name=".DistributorViewProfileActivity" android:label="View Profile" />
-        <activity android:name=".DeliveredOrdersActivity" android:label="Delivered Orders" />
-
-<<<<<<< HEAD
-=======
-        <activity
-            android:name=".MapLocationPickerActivity"
-            android:label="Select Location"/>
->>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
+        <activity android:name=".ui.onboarding.WelcomeActivity" />
+        <activity android:name=".ui.auth.LoginActivity" />
+        <activity android:name=".ui.auth.CreateAccountActivity" />
+        <activity android:name=".ui.auth.OTPVerificationActivity" />
+        <activity android:name=".ui.farmer.FarmerDashboardActivity" />
+        <activity android:name=".ui.farmer.LocateDistributorsActivity" />
+        <activity android:name=".ui.farmer.NewOrdersActivity" />
+        <activity android:name=".ui.farmer.NotificationActivity" />
+        <activity android:name=".ui.farmer.PostAdActivity" />
+        <activity android:name=".ui.farmer.ViewAdActivity" />
+        <activity android:name=".ui.farmer.ProfileActivity" />
+        <activity android:name=".ui.distributor.DistributorDashboardActivity" />
+        <activity android:name=".ui.distributor.AllProductsActivity" />
+        <activity android:name=".ui.distributor.LocateFarmersActivity" />
+        <activity android:name=".ui.farmer.PaymentActivity" />
+        <activity android:name=".ui.farmer.CreateOrderActivity" />
+        <activity android:name=".ui.farmer.FarmerProfileActivity" />
+        <activity android:name=".ui.common.MapLocationPickerActivity" android:label="Select Location" />
+        <activity android:name=".ui.common.SettingsActivity" android:label="Settings" />
+        <activity android:name=".ui.distributor.DistributorNotificationActivity" android:label="Notifications" />
+        <activity android:name=".ui.distributor.DistributorOrdersActivity" android:label="New Orders" />
+        <activity android:name=".ui.distributor.DistributorProfileActivity" android:label="Profile" />
+        <activity android:name=".ui.distributor.DistributorViewProfileActivity" android:label="View Profile" />
+        <activity android:name=".ui.distributor.DeliveredOrdersActivity" android:label="Delivered Orders" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

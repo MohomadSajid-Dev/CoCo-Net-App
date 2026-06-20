@@ -225,11 +225,6 @@
                 android:layout_marginBottom="30dp"
                 android:nestedScrollingEnabled="false" />
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

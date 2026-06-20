@@ -366,11 +366,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-<<<<<<< HEAD
                 <com.google.android.material.button.MaterialButton
-=======
-                <Button
->>>>>>> fef8d6bb83afa6b870f34fe1cd4dc7fded77f4da
                     android:id="@+id/btn_done"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
